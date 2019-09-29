@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const Urls = require('../db/entries');
 const mongoose = require('mongoose');
 const mongo = require('mongodb');
-const backButton = require('../assets/backbutton.js')
-const formatRawText = require('../assets/formatRawText')
+const postController = require('../controllers/postController');
+const getSortedController = require('../controllers/getSortedController');;
 
 require('custom-env').env()
 
@@ -12,8 +11,12 @@ mongoose.connect(process.env.MONGOLAB_URI,
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
-
-const app = express();
+// Allow CORS
+router.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -21,22 +24,11 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/new', function (req, res) {
-  const url = req.body.url;
-  const date = new Date();
-  const urlObj = { url, date };
-  Urls.findOne({ "url": url }, function (error, urlFound) {
-    if (error) res.send('badly done');
-    if (urlFound) {
-      res.send(`The requested url ${formatRawText(url, 'red')} is already in use in the database ${backButton}`)
-    } else {
-      const newEntry = new Urls({ 'url': url, 'date': date })
-        .save(function (error) {
-          if (error) { return res.send(`Couldn't add the url [${formatRawText(url, 'red')}] ${backButton}`) };
-          res.send(`Successfully added the url ${formatRawText(url, 'blue')} at ${formatRawText(date, 'blue')} ${backButton}`)
-        })
-    }
-  });
+  postController(req, res);
 })
 
+router.get('/shorturl/:id', function (req, res) {
+  getSortedController(req, res);
+})
 
 module.exports = router;
