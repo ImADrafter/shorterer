@@ -1,11 +1,10 @@
 {
   "extends": ["eslint:recommended","plugin:prettier/recommended", "plugin:unicorn/recommended"],
-
   "plugins": ["prettier"],
-
   "rules": {
     "prettier/prettier": "error"
   },
-  
-  "parserOptions": { "ecmaVersion": 2020 }
+  "env": {"commonjs": true},
+  "parserOptions": { "ecmaVersion": 2015 }
+
 }
