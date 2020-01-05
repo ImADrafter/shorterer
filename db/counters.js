@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var Counters = new Schema({
-    count: { type: Number, default: 1 }
+  count: { type: Number, default: 1 }
 });
 
-module.exports = mongoose.model('Counters', Counters);
+module.exports = mongoose.model("Counters", Counters);
